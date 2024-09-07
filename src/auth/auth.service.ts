@@ -4,7 +4,9 @@ import { User } from 'src/dto/user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from 'src/entity/user.entity';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
+import { hash } from 'crypto';
+
 
 type AuthInput = { username: string; password: string };
 
@@ -19,12 +21,13 @@ export class AuthService {
   async signUp(input: UserEntity): Promise<UserEntity> {
     const { password } = input;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const inputWithHashedPassword = {
-      password: hashedPassword,
-      ...input,
-    };
-    const newUser = this.usersRepository.create(inputWithHashedPassword);
+    // const hashedPassword = hash('sha256',password);
+    // const inputWithHashedPassword = {
+    //   password: hashedPassword,
+    //   ...input,
+    // };
+    
+    const newUser = this.usersRepository.create(input);
     return await this.usersRepository.save(newUser);
   }
   async validateUser(input: AuthInput): Promise<boolean> {
