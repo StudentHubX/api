@@ -29,10 +29,14 @@ export class UserEntity {
     schoolId: string
 
     @Column()
+    department: string
+
+    @Column()
     country: string
 
     @Column()
     password: string
-    
 
+    
+    
 }
