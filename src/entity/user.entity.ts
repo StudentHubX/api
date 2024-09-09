@@ -1,42 +1,44 @@
-import {Entity, Column, PrimaryGeneratedColumn} from 'typeorm'
-
-type UserT = {
-    userId: number,
-    fullname: string,
-    username: string,
-    age: number,
-    schoolId: string,
-    country: string,
-    password: string
-}
-
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
+import { Post } from './post.entity';
+import { Department } from './department.entity';
 
 @Entity()
 export class UserEntity {
-    @PrimaryGeneratedColumn()
-    userId: number
+  @PrimaryGeneratedColumn()
+  userId: number;
 
-    @Column()
-    fullname: string
+  @Column()
+  fullname: string;
 
-    @Column()
-    username: string
+  @Column()
+  username: string;
 
-    @Column()
-    age: number
+  @Column()
+  age: number;
 
-    @Column()
-    schoolId: string
+  @Column()
+  schoolId: number;
 
-    @Column()
-    department: string
+  @ManyToOne(() => Department, (department) => department.users)
+  department: Department;
 
-    @Column()
-    country: string
+  @Column()
+  country: string;
 
-    @Column()
-    password: string
+  @Column()
+  password: string;
 
-    
-    
+  @Column()
+  gender: string
+
+  @OneToMany(() => Post, (post) => post.author)
+  posts: Post[];
+
+
 }

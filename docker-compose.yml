@@ -1,11 +1,13 @@
 
+
 services:
-  nestapp: 
+  nestapp:
+   
     container_name: nestapp
     image: studenthubx/nestapp:1.0.0
     build: .
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
       - DB_TYPE=postgres
       - PG_HOST=db
@@ -14,20 +16,23 @@ services:
       - PG_DB=postgres
       - PG_PORT=5432
       - JWT_SECRET=buggybuggyboosbbs
+      - OPENAI_API_KEY=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
     depends_on:
       - db
+    volumes:
+      - .:/usr/src/app  
    
-    
-  db: 
+  db:
     container_name: db
     image: postgres:12
     ports:
-      - 5432:5432
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=postgres
     volumes:
       - pgdata:/var/lib/postgresql/data
+
 volumes:
-  pgdata: {}
+  pgdata:

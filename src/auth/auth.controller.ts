@@ -1,6 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthResult, AuthService } from './auth.service';
 import { UserEntity } from 'src/entity/user.entity';
+import { CreateUserDto } from './auth.dto';
 
 type AuthInput = { username: string; password: string };
 @Controller('auth')
@@ -8,7 +9,7 @@ export class AuthController {
     constructor(private readonly authService: AuthService) {}
     @HttpCode(HttpStatus.OK)
     @Post('signup') 
-    async signUp(@Body() input:UserEntity): Promise<AuthResult | Error> {
+    async signUp(@Body() input:CreateUserDto): Promise<AuthResult | Error> {
         return await this.authService.signUp(input)
     }
 
