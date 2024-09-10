@@ -3,7 +3,7 @@ import { AuthResult, AuthService } from './auth.service';
 import { UserEntity } from 'src/entity/user.entity';
 import { CreateUserDto } from './auth.dto';
 
-type AuthInput = { username: string; password: string };
+type AuthInput = { isStudent: boolean; username: string; password: string };
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}

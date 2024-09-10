@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { Student } from './student.entity';
+import { Professional } from './professional.entity';
 
-@Entity('departments')
-export class Department {
+@Entity('industry')
+export class Industry {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -11,5 +11,5 @@ export class Department {
   name: string;
 
   @OneToMany(() => UserEntity, user => user.department)
-  users: Student[];
+  users: Professional[];
 }

@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { DepartmentService } from './department.service';
 
 @Controller('department')
@@ -11,4 +11,5 @@ export class DepartmentController {
          await this.departmentService.create()
          console.log('done')
     }
+
 }

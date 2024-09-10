@@ -22,15 +22,15 @@ export class PostsService {
 
     const author = await this.userRepository.findOne({where: {userId: authorId}})
 
-    const isQualityEnough = await this.aiService.validatePost(content) as unknown as boolean
+    // const isQualityEnough = await this.aiService.validatePost(content) as unknown as boolean
 
     if(!author) {
         return new Error('Author not found')
     }
 
-    if(!isQualityEnough) {
-        return new Error(`Post does not meet moderator's standards`)
-    }
+    // if(!isQualityEnough) {
+    //     return new Error(`Post does not meet moderator's standards`)
+    // }
 
     const newPost = this.postRepository.create({
         title: title,

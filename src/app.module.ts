@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { AuthModule } from './auth/auth.module';
+import { AuthModule } from './core/auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -10,10 +9,12 @@ import { PostsModule } from './posts/posts.module';
 import { AiService } from './ai/ai.service';
 import { AiModule } from './ai/ai.module';
 import { DepartmentModule } from './department/department.module';
+import { StudentModule } from './core/student/student.module';
+import { ProfessionalModule } from './core/professional/professional.module';
+import { IndustryModule } from './industry/industry.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    UsersModule,
     AuthModule,
     JwtModule.register({
       global: true,
@@ -32,7 +33,9 @@ import { DepartmentModule } from './department/department.module';
     PostsModule,
     AiModule,
     DepartmentModule,
-    
+    StudentModule,
+    ProfessionalModule,
+    IndustryModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -16,7 +16,7 @@ services:
       - PG_DB=postgres
       - PG_PORT=5432
       - JWT_SECRET=buggybuggyboosbbs
-      - OPENAI_API_KEY=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
+      - OPENAI_API_KEY=sk-2OoatDgKDgC3k0PsLp-iLJ419H0Gfy79kWSUV3TPA2T3BlbkFJnltUAuKc6_LETQgL9sQ2EscRPOx2nVs6cfbmFlX3YA
     depends_on:
       - db
     volumes:
