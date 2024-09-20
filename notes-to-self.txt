@@ -1,0 +1,2 @@
+Sooo push all industries to industry repository on postgreSQL database 
+then get their IDs and give it to chatGPT to add the IDs of the department's respective industry, then create a service that uploads everything to the db

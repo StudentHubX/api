@@ -12,6 +12,7 @@ import { DepartmentModule } from './department/department.module';
 import { StudentModule } from './core/student/student.module';
 import { ProfessionalModule } from './core/professional/professional.module';
 import { IndustryModule } from './industry/industry.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),

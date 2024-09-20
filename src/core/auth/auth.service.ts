@@ -10,7 +10,6 @@ import { Professional } from 'src/entity/professional.entity';
 import { Industry } from 'src/entity/industry.entity';
 
 type AuthInput = { username: string; password: string };
-type LoginInput = { isStudent: boolean; username: string; password: string };
 export type AuthResult = { access_token: string };
 
 @Injectable()
@@ -21,32 +20,21 @@ export class AuthService {
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
     @InjectRepository(Professional)
-    
     private readonly professionalRepository: Repository<Professional>,
     @InjectRepository(Industry)
     private readonly industryRepository: Repository<Industry>,
 
     private readonly jwtService: JwtService,
   ) {}
-
-  async signUp(input: CreateUserDto): Promise<AuthResult | Error> {
-    const {isStudent} = input 
-    if(!isStudent) {
-      return this.professionalSignUp(input)
-    } 
-    return this.studentSignUp(input)
-  }
-
-  async login(input: LoginInput): Promise<AuthResult | Error> {
-
-    if (input.isStudent) {
-      return this.studentLogin(input)
-    } else {
-      let user = await this.professionalRepository.findOne({
-        where: { username: input.username },
-      });
-    }
-
+  async generateAccessToken(user) {
+    const tokenPayload = {
+      sub: user.userId,
+      username: user.username,
+    };
+  
+    return {
+      access_token: await this.jwtService.signAsync(tokenPayload),
+    };
   }
   /* 
     This is where all the logic for the signup and login for both students and professionals resides
@@ -90,43 +78,30 @@ export class AuthService {
     console.log(inputWithHashedPassword);
     await this.studentRepository.save(newUser);
 
-    const tokenPayload = {
-      sub: newUser.userId,
-      username: newUser.username,
-    };
-
-    return {
-      access_token: await this.jwtService.signAsync(tokenPayload),
-    };
+    return await this.generateAccessToken(newUser)
   }
-  async studentLogin(input: LoginInput) {
-    const user = await this.studentRepository.findOne({where: {username: input.username}})
+  async studentLogin(input: AuthInput) {
+    const user = await this.studentRepository.findOne({
+      where: { username: input.username },
+    });
     const passwordsMatch = await bcrypt.compare(input.password, user.password);
     if (!passwordsMatch) {
       return new UnauthorizedException();
     }
-    const tokenPayload = {
-      sub: user.userId,
-      username: user.username,
-    };
-    return {
-      access_token: await this.jwtService.signAsync(tokenPayload),
-    };
+    return await this.generateAccessToken(user)
   }
 
-  async professionalLogin(input: CreateUserDto) {
-    const user = await this.professionalRepository.findOne({where: {username: input.username}})
+  //Professionals signup/login logic
+
+  async professionalLogin(input: AuthInput) {
+    const user = await this.professionalRepository.findOne({
+      where: { username: input.username },
+    });
     const passwordsMatch = await bcrypt.compare(input.password, user.password);
     if (!passwordsMatch) {
       return new UnauthorizedException();
     }
-    const tokenPayload = {
-      sub: user.userId,
-      username: user.username,
-    };
-    return {
-      access_token: await this.jwtService.signAsync(tokenPayload),
-    };
+    return await this.generateAccessToken(user)
   }
   async professionalSignUp(input: CreateUserDto) {
     const {
@@ -139,18 +114,22 @@ export class AuthService {
       gender,
       role,
       yearsOfExperience,
-      nameOfOrganization
+      nameOfOrganization,
     } = input;
-    const salt = await bcrypt.genSalt(10)
+    const salt = await bcrypt.genSalt(10);
     //check if user is already in existence
-    const user = await this.professionalRepository.findOne({where: {username: username}})
-    if(user) {
+    const user = await this.professionalRepository.findOne({
+      where: { username: username },
+    });
+    if (user) {
       return new Error('User already exists');
     }
 
-    const industryFromEntity = await this.industryRepository.findOne({where: {id: industryId}})
-    if(!industryFromEntity) {
-      return new Error('Industry not found')
+    const industryFromEntity = await this.industryRepository.findOne({
+      where: { id: industryId },
+    });
+    if (!industryFromEntity) {
+      return new Error('Industry not found');
     }
 
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -165,19 +144,11 @@ export class AuthService {
       role: role,
       yearsOfExperience: yearsOfExperience,
       nameOfOrganization: nameOfOrganization,
-
     };
     const newUser = this.professionalRepository.create(inputWithHashedPassword);
     console.log(inputWithHashedPassword);
     await this.professionalRepository.save(newUser);
 
-    const tokenPayload = {
-      sub: newUser.userId,
-      username: newUser.username,
-    };
-
-    return {
-      access_token: await this.jwtService.signAsync(tokenPayload),
-    };
+    return await this.generateAccessToken(newUser)
   }
 }

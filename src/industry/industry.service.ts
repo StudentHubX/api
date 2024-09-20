@@ -9,8 +9,8 @@ export class IndustryService {
         @InjectRepository(Industry)
         private industryRepository: Repository<Industry>
     ) {}
-
-    async findUsers(industryId): Promise<Professional[]> {
+    //Find an industry and return all users in the industry
+    async findUsers(industryId: number): Promise<Professional[]> {
         const industry = await this.industryRepository.findOne({
             where: { id: industryId },
           });

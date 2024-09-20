@@ -1,6 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { Professional } from './professional.entity';
+import { Spaces } from './spaces.entity';
+import { Department } from './department.entity';
 
 @Entity('industry')
 export class Industry {
@@ -10,6 +12,12 @@ export class Industry {
   @Column({ unique: true })
   name: string;
 
-  @OneToMany(() => UserEntity, user => user.department)
+  @OneToMany(() => Professional, user => user.industry)
   users: Professional[];
+
+  @OneToMany(() =>  Spaces, (room ) => room.industry)
+  spaces: Spaces[]
+
+  @OneToMany(() => Department, (department) => department.industry)
+    departments: Department[];
 }

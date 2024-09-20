@@ -2,9 +2,6 @@ import { IsString, IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
 import { Department } from 'src/entity/department.entity';
 
 export class CreateUserDto {
-    @IsBoolean()
-    isStudent: boolean
-
     @IsString()
     fullname: string
 
@@ -16,6 +13,8 @@ export class CreateUserDto {
 
     @IsNumber()
     departmentId?: number
+
+
 
     @IsNumber()
     age: number

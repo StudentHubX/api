@@ -12,4 +12,9 @@ export class DepartmentController {
          console.log('done')
     }
 
+    @Get(':departmentId')
+    async findUsers(@Param('departmentId') departmentId: number) {
+        return await this.departmentService.findUsers(departmentId)
+    }
+
 }

@@ -9,6 +9,7 @@ export class ProfessionalService {
         @InjectRepository(Professional)
         private usersRepository: Repository<Professional>,
     ) {}
+    
      async findUserByUsername(username:string): Promise<Professional | undefined> {
         return await this.usersRepository.findOne({where: {username}})
      }

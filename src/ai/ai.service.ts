@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 const openai = new OpenAI();
 
-const AI_prompt = `You are a moderator for an app that aims to make education as addictive as social media, and by doing every post and content created by any user should be of very high quality. 
+const AI_prompt = `You are a moderator for an app that aims to make education as addictive as social media, and by so doing every post and content created by any user should be of very high quality. 
 Your task is to score every post over 10, if the post scores below 7 return a simple value saying false, 
 but if not return true. You are to score the content based on these 3 criteria: Does the post encourage meaningful discussion or provide useful insights? 
 Posts that foster positive engagement, offer constructive feedback, or contribute to a collaborative environment should score higher. 
@@ -24,6 +24,6 @@ export class AiService {
       ],
     });
 
-    console.log(completion.choices[0].message);
+    return completion.choices[0].message;
   }
 }

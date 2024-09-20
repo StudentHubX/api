@@ -15,8 +15,8 @@ export class ProfessionalController {
       return this.professionalService.findUserByUsername(username);
     }
   
-    @Get(':department')
-    async findUsersOnDepartment(@Param() id: string) {
-      return this.industryService.findUsers(id as unknown as number);
+    @Get(':industry')
+    async findUsersOnDepartment(@Param() industry: string) {
+      return this.industryService.findUsers(industry as unknown as number);
     }
 }
