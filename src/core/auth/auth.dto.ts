@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
 import { Department } from 'src/entity/department.entity';
 
 export class CreateUserDto {
@@ -12,17 +12,31 @@ export class CreateUserDto {
     country: string
 
     @IsNumber()
-    departmentId: number
+    departmentId?: number
+
+
 
     @IsNumber()
     age: number
 
     @IsNumber()
-    schoolId: number
+    schoolId?: number
 
     @IsString()
     password: string
 
     @IsString()
     gender: string
+
+    @IsNumber()
+    yearsOfExperience?: number
+
+    @IsString() 
+    nameOfOrganization?: string
+
+    @IsString()
+    role?: string
+
+    @IsNumber()
+    industryId: number
 }
