@@ -4,10 +4,14 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Post } from './post.entity';
 import { Industry } from './industry.entity';
 import { Spaces } from './spaces.entity';
+import { Resource } from './resource.entity';
+import { Badge } from './badge.entitiy';
 
 @Entity()
 export class Professional {
@@ -46,11 +50,17 @@ export class Professional {
   
   @ManyToOne(()=> Industry, (industry) => industry.users)
   industry: Industry
-
-  // Relations with Room
+  
   @OneToMany(() => Spaces, (room) => room.professionalCoordinator)
   coordinatedSpaces: Spaces[];
 
   @ManyToOne(() => Spaces, (room) => room.professionalMembers)
   spaces: Spaces[];
+
+  @OneToMany(()=> Resource, (resource) => resource.author)
+  resources: Resource[]
+
+  @ManyToMany(() => Badge, (badge) => badge.id)
+  @JoinTable()
+  badges: Badge[]
 }

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entity/user.entity';
+import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
-import { Post } from 'src/entity/post.entity';
+import { Post } from 'src/entities/post.entity';
 import { CreatePostDto } from './dto/post.dto';
 import { AiService } from 'src/ai/ai.service';
 import { CreateUserDto } from 'src/core/auth/auth.dto';
-import { Professional } from 'src/entity/professional.entity';
-import { Student } from 'src/entity/student.entity';
+import { Professional } from 'src/entities/professional.entity';
+import { Student } from 'src/entities/student.entity';
 @Injectable()
 export class PostsService {
   constructor(

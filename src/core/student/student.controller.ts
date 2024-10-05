@@ -1,13 +1,13 @@
 import { Controller, UseGuards, Request, Get, Param } from '@nestjs/common';
 import { StudentService } from './student.service';
 import { AuthGuard } from 'src/guards/auth-guard';
-import { DepartmentService } from 'src/department/department.service';
+import { FacultiesService } from 'src/faculties/faculties.service';
 
 @Controller('student')
 export class StudentController {
   constructor(
     private readonly studentService: StudentService,
-    private readonly departmentService: DepartmentService,
+    private readonly facultiesService: FacultiesService,
   ) {}
 
   @UseGuards(AuthGuard)
@@ -22,6 +22,6 @@ export class StudentController {
 
   @Get(':department')
   async findUsersOnDepartment(@Param() id: string) {
-    return this.departmentService.findUsers(id as unknown as number);
+    return this.facultiesService.findUsers(id as unknown as number);
   }
 }

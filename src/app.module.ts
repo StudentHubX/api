@@ -8,10 +8,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { PostsModule } from './posts/posts.module';
 import { AiService } from './ai/ai.service';
 import { AiModule } from './ai/ai.module';
-import { DepartmentModule } from './department/department.module';
+
 import { StudentModule } from './core/student/student.module';
 import { ProfessionalModule } from './core/professional/professional.module';
 import { IndustryModule } from './industry/industry.module';
+import { FacultiesModule } from './faculties/faculties.module';
+import { ResourcesModule } from './resources/resources.module';
 
 @Module({
   imports: [
@@ -28,15 +30,16 @@ import { IndustryModule } from './industry/industry.module';
       username: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'postgres',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + '/**/*.entities{.ts,.js}'],
       synchronize: true,
     }),
     PostsModule,
     AiModule,
-    DepartmentModule,
     StudentModule,
     ProfessionalModule,
-    IndustryModule
+    IndustryModule,
+    FacultiesModule,
+    ResourcesModule
   ],
   controllers: [AppController],
   providers: [AppService],

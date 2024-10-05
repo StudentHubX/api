@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Industry } from 'src/entity/industry.entity';
-import { Professional } from 'src/entity/professional.entity';
+import { Industry } from 'src/entities/industry.entity';
+import { Professional } from 'src/entities/professional.entity';
 @Injectable()
 export class IndustryService {
     constructor(

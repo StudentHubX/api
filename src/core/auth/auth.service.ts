@@ -3,11 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { Department } from 'src/entity/department.entity';
 import { CreateUserDto } from './auth.dto';
-import { Student } from 'src/entity/student.entity';
-import { Professional } from 'src/entity/professional.entity';
-import { Industry } from 'src/entity/industry.entity';
+import { Student } from 'src/entities/student.entity';
+import { Professional } from 'src/entities/professional.entity';
+import { Industry } from 'src/entities/industry.entity';
+import { Faculty } from 'src/entities/faculty.entity';
 
 type AuthInput = { username: string; password: string };
 export type AuthResult = { access_token: string };
@@ -15,8 +15,8 @@ export type AuthResult = { access_token: string };
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(Department)
-    private readonly departmentRepository: Repository<Department>,
+    @InjectRepository(Faculty)
+    private readonly facultyRepository: Repository<Faculty>,
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
     @InjectRepository(Professional)
@@ -42,7 +42,7 @@ export class AuthService {
   async studentSignUp(input: CreateUserDto) {
     const {
       password,
-      departmentId,
+      facultyId,
       username,
       fullname,
       age,
@@ -57,11 +57,11 @@ export class AuthService {
     if (user) {
       return new Error('User already exists');
     }
-    const departmentfromEnity = await this.departmentRepository.findOne({
-      where: { id: departmentId },
+    const facultyFromEntity = await this.facultyRepository.findOne({
+      where: { id: facultyId },
     });
-    if (!departmentfromEnity) {
-      return new Error('Department not found');
+    if (!facultyFromEntity) {
+      return new Error('Faculty not found');
     }
     const hashedPassword = await bcrypt.hash(password, salt);
     const inputWithHashedPassword = {
@@ -69,7 +69,7 @@ export class AuthService {
       username: username,
       fullname: fullname,
       age: age,
-      department: departmentfromEnity,
+      faculty: facultyFromEntity,
       schoolId: schoolId,
       country: country,
       gender: gender,
