@@ -14,6 +14,7 @@ import { ProfessionalModule } from './core/professional/professional.module';
 import { IndustryModule } from './industry/industry.module';
 import { FacultiesModule } from './faculties/faculties.module';
 import { ResourcesModule } from './resources/resources.module';
+import { SpacesModule } from './spaces/spaces.module';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { ResourcesModule } from './resources/resources.module';
       username: process.env.DB_USER || 'postgres',
       password: process.env.DB_PASSWORD || 'postgres',
       database: process.env.DB_NAME || 'postgres',
-      entities: [__dirname + '/**/*.entities{.ts,.js}'],
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     PostsModule,
@@ -39,7 +40,8 @@ import { ResourcesModule } from './resources/resources.module';
     ProfessionalModule,
     IndustryModule,
     FacultiesModule,
-    ResourcesModule
+    ResourcesModule,
+    SpacesModule
   ],
   controllers: [AppController],
   providers: [AppService],

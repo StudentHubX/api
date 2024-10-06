@@ -8,10 +8,9 @@ import {
   ManyToMany,
 } from 'typeorm';
 import { Post } from './post.entity';
-import { Department } from './department.entity';
 import { Spaces } from './spaces.entity';
 import { Resource } from './resource.entity';
-import { Badge } from './badge.entitiy';
+import { Badge } from './badge.entity';
 import { Faculty } from './faculty.entity';
 
 @Entity()

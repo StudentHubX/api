@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { UserEntity } from './user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
 import { Professional } from './professional.entity';
 import { Spaces } from './spaces.entity';
-import { Department } from './department.entity';
+
+import { Faculty } from './faculty.entity';
+import { Topic } from './topics.entity';
 
 @Entity('industry')
 export class Industry {
@@ -18,6 +19,9 @@ export class Industry {
   @OneToMany(() =>  Spaces, (room ) => room.industry)
   spaces: Spaces[]
 
-  @OneToMany(() => Department, (department) => department.industry)
-    departments: Department[];
+  @OneToMany(() => Faculty, (faculty) => faculty.industry)
+    faculties: Faculty[];
+
+  @ManyToMany(() => Topic, (topic) => topic.industries)
+  topics: Topic[]
 }

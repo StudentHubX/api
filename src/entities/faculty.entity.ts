@@ -4,6 +4,8 @@ import {
     Column,
     OneToMany,
     ManyToOne,
+    ManyToMany,
+    JoinTable,
   } from 'typeorm';
   import { Student } from './student.entity';
   import { Industry } from './industry.entity';
@@ -13,13 +15,14 @@ import {
     @PrimaryGeneratedColumn()
     id: number;
   
-    @Column({unique: true})
+    @Column()
     name: string;
   
     @OneToMany(() => Student, (user) => user.faculty)
     users: Student[];
   
-    @ManyToOne(() => Industry, (industry) => industry.departments)
+    @ManyToMany(() => Industry, (industry) => industry.faculties)
+    @JoinTable()
     industry: Industry;
   }
   

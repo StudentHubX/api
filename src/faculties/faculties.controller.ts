@@ -4,6 +4,11 @@ import { FacultiesService } from './faculties.service';
 @Controller('faculties')
 export class FacultiesController {
     constructor(private readonly facultyService: FacultiesService) {}
+
+    @Get('')
+    async create() {
+        await this.facultyService.create()
+    }
     @Get(':facultyId')
     async getallUsers(@Param('facultyId') facultyId: number) {
         return this.facultyService.findUsers(facultyId)

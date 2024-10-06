@@ -1,6 +1,4 @@
 import { IsString, IsNotEmpty, IsNumber, IsBoolean } from 'class-validator';
-import { Department } from 'src/entities/department.entity';
-
 export class CreateUserDto {
     @IsString()
     fullname: string

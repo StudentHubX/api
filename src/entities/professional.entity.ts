@@ -11,7 +11,7 @@ import { Post } from './post.entity';
 import { Industry } from './industry.entity';
 import { Spaces } from './spaces.entity';
 import { Resource } from './resource.entity';
-import { Badge } from './badge.entitiy';
+import { Badge } from './badge.entity';
 
 @Entity()
 export class Professional {
