@@ -23,6 +23,6 @@ import {
   
     @ManyToMany(() => Industry, (industry) => industry.faculties)
     @JoinTable()
-    industry: Industry;
+    industries: Industry[];
   }
   

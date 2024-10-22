@@ -22,6 +22,11 @@ export class PostsService {
     private readonly aiService: AiService,
   ) {}
 
+  async getPost(id: string): Promise<Post | Error> {
+    const idToUse = id as unknown as number
+    const post = await this.postRepository.findOne({where: {id: idToUse}})
+    return post
+  }
   async createPost(data: CreatePostDto): Promise<Post | Error> {
     const { isStudent, type, authorId, title, content } = data;
     let author: Student | Professional;

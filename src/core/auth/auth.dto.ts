@@ -12,7 +12,8 @@ export class CreateUserDto {
     @IsNumber()
     facultyId?: number
 
-
+    @IsString()
+    email: string
 
     @IsNumber()
     age: number

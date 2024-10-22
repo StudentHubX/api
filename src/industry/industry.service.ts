@@ -26,10 +26,9 @@ export class IndustryService {
         try {
           const industryEntities = await Promise.all(
             industryFaculties.map(async (industry) => {
-              const faculties = await this.findFaculties(industry);
+              // const faculties = await this.findFaculties(industry);
               return this.industryRepository.create({
                 name: industry.industry,
-                faculties: faculties,
               });
             }),
           );

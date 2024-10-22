@@ -26,9 +26,10 @@ export class AuthService {
 
     private readonly jwtService: JwtService,
   ) {}
-  async generateAccessToken(user) {
+  async generateAccessToken(isStudent: boolean, user: Student | Professional) {
     const tokenPayload = {
       sub: user.userId,
+      isStudent: isStudent,
       username: user.username,
     };
   
@@ -46,13 +47,17 @@ export class AuthService {
       username,
       fullname,
       age,
-      schoolId,
       country,
       gender,
+      email
     } = input;
     const salt = await bcrypt.genSalt(10);
 
-    const user = this.studentRepository.find({ where: { username: username } });
+    const [student, professional] = await Promise.all([
+      this.studentRepository.findOne({ where: { username: username } }),
+      this.professionalRepository.findOne({ where: { username: username } }),
+    ]);
+    const user = student || professional
 
     if (user) {
       return new Error('User already exists');
@@ -70,15 +75,15 @@ export class AuthService {
       fullname: fullname,
       age: age,
       faculty: facultyFromEntity,
-      schoolId: schoolId,
       country: country,
       gender: gender,
+      email: email
     };
     const newUser = this.studentRepository.create(inputWithHashedPassword);
     console.log(inputWithHashedPassword);
     await this.studentRepository.save(newUser);
 
-    return await this.generateAccessToken(newUser)
+    return await this.generateAccessToken(true, newUser)
   }
   async studentLogin(input: AuthInput) {
     const user = await this.studentRepository.findOne({
@@ -88,7 +93,7 @@ export class AuthService {
     if (!passwordsMatch) {
       return new UnauthorizedException();
     }
-    return await this.generateAccessToken(user)
+    return await this.generateAccessToken(true, user)
   }
 
   //Professionals signup/login logic
@@ -101,7 +106,7 @@ export class AuthService {
     if (!passwordsMatch) {
       return new UnauthorizedException();
     }
-    return await this.generateAccessToken(user)
+    return await this.generateAccessToken(false, user)
   }
   async professionalSignUp(input: CreateUserDto) {
     const {
@@ -115,12 +120,15 @@ export class AuthService {
       role,
       yearsOfExperience,
       nameOfOrganization,
+      email
     } = input;
     const salt = await bcrypt.genSalt(10);
     //check if user is already in existence
-    const user = await this.professionalRepository.findOne({
-      where: { username: username },
-    });
+    const [student, professional] = await Promise.all([
+      this.studentRepository.findOne({ where: { username: username } }),
+      this.professionalRepository.findOne({ where: { username: username } }),
+    ]);
+    const user = student || professional
     if (user) {
       return new Error('User already exists');
     }
@@ -136,6 +144,7 @@ export class AuthService {
     const inputWithHashedPassword = {
       password: hashedPassword,
       username: username,
+      email: email,
       fullname: fullname,
       age: age,
       Industry: industryFromEntity,
@@ -149,6 +158,6 @@ export class AuthService {
     console.log(inputWithHashedPassword);
     await this.professionalRepository.save(newUser);
 
-    return await this.generateAccessToken(newUser)
+    return await this.generateAccessToken(false, newUser)
   }
 }

@@ -17,6 +17,9 @@ import { Badge } from './badge.entity';
 export class Professional {
   @PrimaryGeneratedColumn()
   userId: number;
+  
+  @Column()
+  email:  string;
 
   @Column()
   fullname: string;
@@ -53,9 +56,6 @@ export class Professional {
   
   @OneToMany(() => Spaces, (room) => room.professionalCoordinator)
   coordinatedSpaces: Spaces[];
-
-  @ManyToOne(() => Spaces, (room) => room.professionalMembers)
-  spaces: Spaces[];
 
   @OneToMany(()=> Resource, (resource) => resource.author)
   resources: Resource[]

@@ -1,27 +1,39 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { Professional } from './professional.entity';
 import { Spaces } from './spaces.entity';
 
 import { Faculty } from './faculty.entity';
 import { Topic } from './topics.entity';
+import { Post } from './post.entity';
 
 @Entity('industry')
 export class Industry {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
-  @OneToMany(() => Professional, user => user.industry)
+  @OneToMany(() => Professional, (user) => user.industry)
   users: Professional[];
 
-  @OneToMany(() =>  Spaces, (room ) => room.industry)
-  spaces: Spaces[]
+  @OneToMany(() => Spaces, (room) => room.industry)
+  spaces: Spaces[];
 
-  @OneToMany(() => Faculty, (faculty) => faculty.industry)
-    faculties: Faculty[];
+  @ManyToMany(() => Faculty, (faculty) => faculty.industries)
+  @JoinTable()
+  faculties: Faculty[];
 
   @ManyToMany(() => Topic, (topic) => topic.industries)
-  topics: Topic[]
+  topics: Topic[];
+
+  @OneToMany(() => Post, (post) => post.industry)
+  posts: Post[];
 }

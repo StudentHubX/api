@@ -15,6 +15,7 @@ services:
       - PG_PASSWORD=postgres
       - PG_DB=postgres
       - PG_PORT=5432
+      - DB_NAME=postgres
       - JWT_SECRET=buggybuggyboosbbs
       - OPENAI_API_KEY=sk-2OoatDgKDgC3k0PsLp-iLJ419H0Gfy79kWSUV3TPA2T3BlbkFJnltUAuKc6_LETQgL9sQ2EscRPOx2nVs6cfbmFlX3YA
     depends_on:

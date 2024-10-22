@@ -19,6 +19,9 @@ export class Student {
   userId: number;
 
   @Column()
+  email: string
+
+  @Column()
   fullname: string;
 
   @Column({ unique: true })
@@ -26,9 +29,6 @@ export class Student {
 
   @Column()
   age: number;
-
-  @Column()
-  schoolId: number;
 
   @ManyToOne(() => Faculty, (faculty) => faculty.users)
   faculty: Faculty;
@@ -44,10 +44,6 @@ export class Student {
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
-
-  // Relations with Room
-  @OneToMany(() => Spaces, (room) => room.studentCoordinator)
-  coordinatedSpaces: Spaces[];
 
   @ManyToOne(() => Spaces, (room) => room.studentMembers)
   spaces: Spaces[];
