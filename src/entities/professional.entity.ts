@@ -6,12 +6,14 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToOne,
 } from 'typeorm';
 import { Post } from './post.entity';
 import { Industry } from './industry.entity';
 import { Spaces } from './spaces.entity';
 import { Resource } from './resource.entity';
 import { Badge } from './badge.entity';
+import { Social } from './social.entity';
 
 @Entity()
 export class Professional {
@@ -63,4 +65,7 @@ export class Professional {
   @ManyToMany(() => Badge, (badge) => badge.id)
   @JoinTable()
   badges: Badge[]
+
+  @OneToOne(() => Social, (social) => social.user)
+  socials: Social[]
 }

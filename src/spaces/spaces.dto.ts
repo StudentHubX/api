@@ -6,4 +6,7 @@ export class CreateSpaceDto {
 
     @IsNumber()
     professionalId: number
+
+    @IsNumber()
+    maxNumberOfStudents: number
 }

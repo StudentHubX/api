@@ -17,6 +17,9 @@ export class StudentService {
   async findUserByUsername(username: string): Promise<Student | undefined> {
     return await this.usersRepository.findOne({ where: { username } });
   }
+  async fetchUser(userPayload) {
+    const user = await this.usersRepository.findOne({where: {username: userPayload.username}})
+  }
   async feed(userId: number, limit: number) {
     const user = await this.usersRepository.findOne({
       where: { userId: userId },

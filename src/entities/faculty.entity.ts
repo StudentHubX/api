@@ -22,7 +22,6 @@ import {
     users: Student[];
   
     @ManyToMany(() => Industry, (industry) => industry.faculties)
-    @JoinTable()
     industries: Industry[];
   }
   

@@ -34,6 +34,8 @@ export class SpacesService {
       const newSpace = this.spacesRepository.create({
         name: data.name,
         professionalCoordinator: professionalUser,
+        industry: professionalUser.industry,
+        maxNumberOfStudents: data.maxNumberOfStudents
       });
       await this.spacesRepository.save(newSpace);
     } catch (error) {
@@ -50,6 +52,10 @@ export class SpacesService {
     });
     if (!space) {
       throw new BadRequestException('Space not found');
+    }
+
+    if(space.studentMembers.length + 1 > space.maxNumberOfStudents) {
+      throw new BadRequestException('Space cannot take in one more students')
     }
 
     const user = await this.studentRepository.findOne({

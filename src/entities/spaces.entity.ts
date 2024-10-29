@@ -6,10 +6,12 @@ import {
     JoinTable,
     ManyToOne,
     JoinColumn,
+    OneToMany,
   } from 'typeorm';
   import { Student } from './student.entity';  // Assuming you have a Student entity
   import { Professional } from './professional.entity';  // Assuming you have a Professional entity
 import { Industry } from './industry.entity';
+import { spacePost } from './spacePost.entity';
   
   @Entity()
   export class Spaces {
@@ -38,5 +40,11 @@ import { Industry } from './industry.entity';
   
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
+
+    @Column()
+    maxNumberOfStudents: number
+
+    @OneToMany(() => spacePost, (post) => post.space)
+    posts: spacePost[]
   }
   
