@@ -17,9 +17,35 @@ export class StudentService {
   async findUserByUsername(username: string): Promise<Student | undefined> {
     return await this.usersRepository.findOne({ where: { username } });
   }
-  async fetchUser(userPayload) {
-    const user = await this.usersRepository.findOne({where: {username: userPayload.username}})
+  async fetchUser(username) {
+    try {
+      const user = await this.usersRepository.findOne({
+        where: { username: username },
+      });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      return {
+        username: user.username,
+        email: user.email,
+        fullname: user.fullname,
+        id: user.userId,
+        country: user.country
+      };
+    } catch (error) {
+      console.error('Error fetching user:', error);
+
+      // Handle different types of errors if needed
+      if (error.message === 'User not found') {
+        throw new Error('User not found');
+      } else {
+        throw new Error('An error occurred while fetching the user');
+      }
+    }
   }
+
   async feed(userId: number, limit: number) {
     const user = await this.usersRepository.findOne({
       where: { userId: userId },

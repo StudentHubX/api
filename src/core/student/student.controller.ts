@@ -16,7 +16,8 @@ export class StudentController {
   @UseGuards(AuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
-    return req.user;
+    console.log(req.user)
+    return this.studentService.fetchUser(req.user.username)
   }
 
   @UseGuards(AuthGuard)

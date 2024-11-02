@@ -33,7 +33,6 @@ import { spacePost } from './spacePost.entity';
       () => Professional,
       (professional) => professional.coordinatedSpaces,
       { nullable: true },
-      
     )
     @JoinColumn()
     professionalCoordinator: Professional;
