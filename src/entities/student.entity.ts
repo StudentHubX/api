@@ -13,8 +13,13 @@ import { Spaces } from './spaces.entity';
 import { Resource } from './resource.entity';
 import { Badge } from './badge.entity';
 import { Faculty } from './faculty.entity';
-import { Social } from './social.entity';
 
+
+export interface Social {
+  username: string,
+  type: 'INSTAGRAM' | 'X'
+
+}
 
 @Entity()
 export class Student {
@@ -58,6 +63,6 @@ export class Student {
   @JoinTable()
   badges: Badge[]
 
-  @OneToOne(() => Social, (social) => social.user)
+  @Column({ type: 'jsonb', nullable: true })
   socials: Social[]
 }

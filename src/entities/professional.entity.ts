@@ -13,7 +13,12 @@ import { Industry } from './industry.entity';
 import { Spaces } from './spaces.entity';
 import { Resource } from './resource.entity';
 import { Badge } from './badge.entity';
-import { Social } from './social.entity';
+
+interface Social {
+  username: string,
+  type: 'INSTAGRAM' | 'X'
+
+}
 
 @Entity()
 export class Professional {
@@ -66,6 +71,6 @@ export class Professional {
   @JoinTable()
   badges: Badge[]
 
-  @OneToOne(() => Social, (social) => social.user)
+  @Column({ type: 'jsonb', nullable: true })
   socials: Social[]
 }

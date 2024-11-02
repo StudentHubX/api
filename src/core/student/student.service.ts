@@ -6,6 +6,11 @@ import { Faculty } from 'src/entities/faculty.entity';
 import { Industry } from 'src/entities/industry.entity';
 import { Post } from 'src/entities/post.entity';
 
+interface Social {
+  type: 'INSTAGRAM' | 'X';
+  username: string;
+}
+
 @Injectable()
 export class StudentService {
   constructor(
@@ -17,7 +22,8 @@ export class StudentService {
   async findUserByUsername(username: string): Promise<Student | undefined> {
     return await this.usersRepository.findOne({ where: { username } });
   }
-  async fetchUser(username) {
+  async fetchUser(username: string): Promise<{username:  string, socials: Social[], fullname: string, email: string, id: number, country: string}> {
+
     try {
       const user = await this.usersRepository.findOne({
         where: { username: username },
@@ -32,7 +38,8 @@ export class StudentService {
         email: user.email,
         fullname: user.fullname,
         id: user.userId,
-        country: user.country
+        country: user.country,
+        socials: user.socials
       };
     } catch (error) {
       console.error('Error fetching user:', error);
@@ -43,6 +50,29 @@ export class StudentService {
       } else {
         throw new Error('An error occurred while fetching the user');
       }
+    }
+  }
+
+  async addSocialToUser(
+  
+    loggedInUserId: number,
+    socials: Social[],
+  ) {
+    try {
+      // Find the user by userId
+      const user = await this.usersRepository.findOne({ where: { userId: loggedInUserId } });
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      user.socials = socials;
+      await this.usersRepository.save(user);
+
+      return user;
+    } catch (error) {
+      console.error('Error adding social to user:', error);
+      throw new Error('Failed to add social profile');
     }
   }
 
