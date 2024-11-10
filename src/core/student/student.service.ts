@@ -22,7 +22,7 @@ export class StudentService {
   async findUserByUsername(username: string): Promise<Student | undefined> {
     return await this.usersRepository.findOne({ where: { username } });
   }
-  async fetchUser(username: string): Promise<{username:  string, socials: Social[], fullname: string, email: string, id: number, country: string}> {
+  async fetchUser(username: string): Promise<{username:  string, socials: Social[], fullname: string, email: string, id: number, country: string, isStudent: boolean}> {
 
     try {
       const user = await this.usersRepository.findOne({
@@ -39,9 +39,10 @@ export class StudentService {
         fullname: user.fullname,
         id: user.userId,
         country: user.country,
-        socials: user.socials
+        socials: user.socials,
+        isStudent: true
       };
-    } catch (error) {
+  } catch (error) {
       console.error('Error fetching user:', error);
 
       // Handle different types of errors if needed

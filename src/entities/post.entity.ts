@@ -8,23 +8,22 @@ import { Industry } from './industry.entity'
 @Entity()
 export class Post {
     @PrimaryGeneratedColumn()
-    id: number
+    id: number;
 
     @Column()
-    title?: string
+    title: string;
 
     @Column()
-    content: string
+    content: string;
 
-    @Column()
-    type: "FLASHCARD" | "POST" 
+    @ManyToOne(() => Student, (student) => student.posts, { nullable: true })
+    student: Student | null;
 
-    @ManyToOne(() => Student,(user) => user.posts)
-    @ManyToOne(() => Professional, (user) => user.posts)
-    author: Student | Professional
+    @ManyToOne(() => Professional, (professional) => professional.posts, { nullable: true })
+    professional: Professional | null;
 
     @ManyToOne(() => Industry, (industry) => industry.posts)
-    industry: Industry
+    industry: Industry;
 
     @CreateDateColumn()
     createdAt: Date;

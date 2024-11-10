@@ -52,4 +52,34 @@ export class IndustryService {
           const usersInIndustry = industry.users;
           return usersInIndustry;
     }
+
+    async initializeIndustries() {
+      const industryNames = [
+        "Technology",
+        "Gaming",
+        "Data Science",
+        "Cybersecurity",
+        "Hardware Development",
+        "Software Development",
+        "Artificial Intelligence",
+      ];
+    
+      try {
+        for (const name of industryNames) {
+          // Check if the industry already exists
+          const existingIndustry = await this.industryRepository.findOne({ where: { name } });
+    
+          if (!existingIndustry) {
+            // Create and save the industry if it doesn't exist
+            const industry = this.industryRepository.create({ name });
+            await this.industryRepository.save(industry);
+            console.log(`Industry ${name} created.`);
+          } else {
+            console.log(`Industry ${name} already exists.`);
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing industries:", error);
+      }
+    }
 }

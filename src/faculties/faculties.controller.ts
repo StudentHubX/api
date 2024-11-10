@@ -7,7 +7,7 @@ export class FacultiesController {
 
     @Get('')
     async create() {
-        await this.facultyService.create()
+        await this.facultyService.createFaculty()
     }
     @Get(':facultyId')
     async getallUsers(@Param('facultyId') facultyId: number) {

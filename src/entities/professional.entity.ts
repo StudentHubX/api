@@ -55,7 +55,7 @@ export class Professional {
   @Column()
   gender: string;
 
-  @OneToMany(() => Post, (post) => post.author)
+  @OneToMany(() => Post, (post) => post.professional)
   posts: Post[];
   
   @ManyToOne(()=> Industry, (industry) => industry.users)

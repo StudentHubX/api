@@ -27,6 +27,7 @@ export class StudentController {
   }
 
   @UseGuards(AuthGuard)
+  @Get('feed')
   getFeed(@Request() req) {
     return this.studentService.feed(req.user.sub, 10);
   }

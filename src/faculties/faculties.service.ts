@@ -62,6 +62,45 @@ export class FacultiesService {
       console.error('Error creating faculties:', error);
     }
   }
+  async createFaculty() {
+    try {
+      const industryNames = [
+        "Technology",
+        "Gaming",
+        "Data Science",
+        "Cybersecurity",
+        "Hardware Development",
+        "Software Development",
+        "Artificial Intelligence",
+      ];
+  
+      const industries = await Promise.all(
+        industryNames.map(name =>
+          this.industryRepository.findOne({ where: { name } })
+        )
+      );
+  
+      const validIndustries = industries.filter(industry => industry);
+  
+      if (validIndustries.length === 0) {
+        throw new Error("No industries found to associate with the faculty.");
+      }
+  
+      const newFaculty = this.facultyRepository.create({
+        name: "Faculty of Engineering",
+        industries: validIndustries,
+      });
+  
+      await this.facultyRepository.save(newFaculty);
+  
+      console.log("Faculty created with associated industries successfully!");
+  
+    } catch (error) {
+      console.error("Error creating faculty:", error);
+    }
+  }
+  
+
 
   async findUsers(facultyId: number) {
     const faculty = await this.facultyRepository.findOne({

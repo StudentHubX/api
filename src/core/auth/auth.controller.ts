@@ -1,6 +1,7 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Query, BadRequestException, Logger } from '@nestjs/common';
+import { Request, Body, Controller, HttpCode, HttpStatus, Post, Query, BadRequestException, Logger, Get, UseGuards } from '@nestjs/common';
 import { AuthResult, AuthService } from './auth.service';
 import { CreateUserDto } from './auth.dto';
+import { AuthGuard } from 'src/guards/auth-guard';
 
 type AuthInput = { username: string; password: string };
 
@@ -9,6 +10,12 @@ export class AuthController {
     private readonly logger = new Logger(AuthController.name);
 
     constructor(private readonly authService: AuthService) {}
+
+    @UseGuards(AuthGuard)
+    @Get('getAuth')
+    getAuth(@Request() req) {
+        return req.user
+    }
 
     @HttpCode(HttpStatus.OK)
     @Post('signup')

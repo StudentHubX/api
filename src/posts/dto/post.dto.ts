@@ -1,12 +1,9 @@
 // src/modules/post/dto/create-post.dto.ts
-import { IsString, IsNotEmpty, IsBoolean } from 'class-validator';
+import { IsString, IsNotEmpty, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreatePostDto {
   @IsBoolean()
   isStudent: boolean
-
-  @IsString()
-  type: "FLASHCARD" | "POST"
   
   @IsString()
   @IsNotEmpty()
@@ -17,5 +14,8 @@ export class CreatePostDto {
   content: string;
 
   @IsNotEmpty()
-  authorId: number;  
+  authorId: number; 
+  
+  @IsNumber()
+  industryId: number
 }

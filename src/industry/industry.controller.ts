@@ -7,6 +7,6 @@ export class IndustryController {
 
     @Get('')
     async create() {
-        await this.industryService.createIndustries()
+        await this.industryService.initializeIndustries()
     }
 }

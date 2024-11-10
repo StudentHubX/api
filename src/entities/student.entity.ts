@@ -50,7 +50,7 @@ export class Student {
   @Column()
   gender: string;
 
-  @OneToMany(() => Post, (post) => post.author)
+  @OneToMany(() => Post, (post) => post.student)
   posts: Post[];
 
   @ManyToOne(() => Spaces, (room) => room.studentMembers)
