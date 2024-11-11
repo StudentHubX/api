@@ -78,24 +78,33 @@ export class StudentService {
   }
 
   async feed(userId: number, limit: number) {
+    // Load the user with faculty and industries relations
     const user = await this.usersRepository.findOne({
       where: { userId: userId },
+      relations: ['faculty', 'faculty.industries'], // Ensure 'faculty' and its industries are loaded
     });
-
-    if (!user) {
-      throw new Error('User not found');
+  
+    // Check if user and user.faculty exist
+    if (!user || !user.faculty) {
+      throw new Error('User or faculty not found');
     }
-
-    const userIndustry = user.faculty.industries;
-
+  
+    // Extract industry IDs from the user's faculty industries
+    const userIndustryIds = user.faculty.industries.map(industry => industry.id);
+  
+    // Query to get posts with related student and professional entities
     const userRecommendedPosts = await this.postRepository
       .createQueryBuilder('post')
-      .where('post.industry IN (:...userIndustries)', {
-        userIndustries: userIndustry,
-      }) // Using IN clause for multiple industries
+      .leftJoinAndSelect('post.student', 'student') // Include the student relation
+      .leftJoinAndSelect('post.professional', 'professional') // Include the professional relation
+      .where('post.industryId IN (:...userIndustryIds)', {
+        userIndustryIds, // Pass only industry IDs
+      })
       .orderBy('post.createdAt', 'DESC')
       .limit(limit)
       .getMany();
+  
     return userRecommendedPosts;
   }
-}
+  
+}  
