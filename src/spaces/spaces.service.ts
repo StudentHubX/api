@@ -9,7 +9,8 @@ import { Professional } from 'src/entities/professional.entity';
 import { Spaces } from 'src/entities/spaces.entity';
 import { Student } from 'src/entities/student.entity';
 import { Repository } from 'typeorm';
-import { CreateSpaceDto } from './spaces.dto';
+import { CreateSpaceDto, spacePostDTO } from './spaces.dto';
+import { spacePost } from 'src/entities/spacePost.entity';
 @Injectable()
 export class SpacesService {
   private readonly logger = new Logger('spaces');
@@ -20,6 +21,8 @@ export class SpacesService {
     private readonly professionalRepository: Repository<Professional>,
     @InjectRepository(Student)
     private readonly studentRepository: Repository<Student>,
+    @InjectRepository(spacePost)
+    private readonly spacePostRepository: Repository<spacePost>,
   ) {}
   async createSpace(data: CreateSpaceDto) {
     const professionalUser = await this.professionalRepository.findOne({
@@ -35,7 +38,7 @@ export class SpacesService {
         name: data.name,
         professionalCoordinator: professionalUser,
         industry: professionalUser.industry,
-        maxNumberOfStudents: data.maxNumberOfStudents
+        maxNumberOfStudents: data.maxNumberOfStudents,
       });
       await this.spacesRepository.save(newSpace);
     } catch (error) {
@@ -54,8 +57,8 @@ export class SpacesService {
       throw new BadRequestException('Space not found');
     }
 
-    if(space.studentMembers.length + 1 > space.maxNumberOfStudents) {
-      throw new BadRequestException('Space cannot take in one more students')
+    if (space.studentMembers.length + 1 > space.maxNumberOfStudents) {
+      throw new BadRequestException('Space cannot take in one more students');
     }
 
     const user = await this.studentRepository.findOne({
@@ -75,4 +78,32 @@ export class SpacesService {
       );
     }
   }
+
+  async createPostOnSpace(data: spacePostDTO) {
+    // Find the space to ensure it exists and link it to the new post
+    const space = await this.spacesRepository.findOne({
+      where: { id: data.spaceId },
+    });
+  
+    if (!space) {
+      throw new BadRequestException('Space not found');
+    }
+  
+    // // Validate mediaUrl presence for specific types
+    // if ((data.type === 'image' || data.type === 'video') && !data.mediaUrl) {
+    //   throw new BadRequestException(
+    //     'Media URL is required for image and video types'
+    //   );
+    // }
+  
+    const newPostSpace = this.spacePostRepository.create({
+      content: data.content,
+      mediaUrl: data.mediaUrl,
+      type: data.type,
+      space: space, 
+    });
+  
+    return await this.spacePostRepository.save(newPostSpace);
+  }
+  
 }

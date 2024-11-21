@@ -17,10 +17,7 @@ export class CreateUserDto {
 
     @IsNumber()
     age: number
-
-    @IsNumber()
-    schoolId?: number
-
+    
     @IsString()
     password: string
 

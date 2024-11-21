@@ -12,6 +12,7 @@ import {
   import { Professional } from './professional.entity';  // Assuming you have a Professional entity
 import { Industry } from './industry.entity';
 import { spacePost } from './spacePost.entity';
+import {Event} from './event.entity';
   
   @Entity()
   export class Spaces {
@@ -45,5 +46,8 @@ import { spacePost } from './spacePost.entity';
 
     @OneToMany(() => spacePost, (post) => post.space)
     posts: spacePost[]
+
+    @OneToMany(() => Event, (event) => event.space) 
+    events: Event[]
   }
   

@@ -5,9 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Spaces } from 'src/entities/spaces.entity';
 import { Professional } from 'src/entities/professional.entity';
 import { Student } from 'src/entities/student.entity';
+import { spacePost } from 'src/entities/spacePost.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Professional, Student, Spaces])],
+  imports: [TypeOrmModule.forFeature([Professional, Student, Spaces, spacePost])],
   controllers: [SpacesController],
   providers: [SpacesService]
 })
