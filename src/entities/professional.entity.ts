@@ -4,15 +4,29 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
+  OneToOne,
 } from 'typeorm';
 import { Post } from './post.entity';
 import { Industry } from './industry.entity';
 import { Spaces } from './spaces.entity';
+import { Resource } from './resource.entity';
+import { Badge } from './badge.entity';
+
+interface Social {
+  username: string,
+  type: 'INSTAGRAM' | 'X'
+
+}
 
 @Entity()
 export class Professional {
   @PrimaryGeneratedColumn()
   userId: number;
+  
+  @Column()
+  email:  string;
 
   @Column()
   fullname: string;
@@ -41,16 +55,22 @@ export class Professional {
   @Column()
   gender: string;
 
-  @OneToMany(() => Post, (post) => post.author)
+  @OneToMany(() => Post, (post) => post.professional)
   posts: Post[];
   
   @ManyToOne(()=> Industry, (industry) => industry.users)
   industry: Industry
-
-  // Relations with Room
+  
   @OneToMany(() => Spaces, (room) => room.professionalCoordinator)
   coordinatedSpaces: Spaces[];
 
-  @ManyToOne(() => Spaces, (room) => room.professionalMembers)
-  spaces: Spaces[];
+  @OneToMany(()=> Resource, (resource) => resource.author)
+  resources: Resource[]
+
+  @ManyToMany(() => Badge, (badge) => badge.id)
+  @JoinTable()
+  badges: Badge[]
+
+  @Column({ type: 'jsonb', nullable: true })
+  socials: Social[]
 }

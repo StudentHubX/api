@@ -8,10 +8,13 @@ import { JwtModule } from '@nestjs/jwt';
 import { PostsModule } from './posts/posts.module';
 import { AiService } from './ai/ai.service';
 import { AiModule } from './ai/ai.module';
-import { DepartmentModule } from './department/department.module';
+
 import { StudentModule } from './core/student/student.module';
 import { ProfessionalModule } from './core/professional/professional.module';
 import { IndustryModule } from './industry/industry.module';
+import { FacultiesModule } from './faculties/faculties.module';
+import { ResourcesModule } from './resources/resources.module';
+import { SpacesModule } from './spaces/spaces.module';
 
 @Module({
   imports: [
@@ -23,20 +26,22 @@ import { IndustryModule } from './industry/industry.module';
     }),
     TypeOrmModule.forRoot({
       type: process.env.DB_TYPE as 'postgres', // or 'postgres' directly
-      host: process.env.DB_HOST || 'db',
-      port: parseInt(process.env.DB_PORT) || 5432,
-      username: process.env.DB_USER || 'postgres',
-      password: process.env.DB_PASSWORD || 'postgres',
-      database: process.env.DB_NAME || 'postgres',
+      host: process.env.PG_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.PG_USER,
+      password: process.env.PG_PASSWORD,
+      database: process.env.DB_NAME,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
     }),
     PostsModule,
     AiModule,
-    DepartmentModule,
     StudentModule,
     ProfessionalModule,
-    IndustryModule
+    IndustryModule,
+    FacultiesModule,
+    ResourcesModule,
+    SpacesModule
   ],
   controllers: [AppController],
   providers: [AppService],
