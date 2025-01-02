@@ -160,4 +160,18 @@ export class AuthService {
 
     return await this.generateAccessToken(false, newUser)
   }
+
+  async getUserByUsername(username: string) {
+    const [student, professional] = await Promise.all([
+      this.studentRepository.findOne({ where: { username: username } }),
+      this.professionalRepository.findOne({ where: { username: username } }),
+    ]);
+    const user = student || professional
+
+    if(!user) {
+      throw new Error("User not found")
+    }
+
+    return user
+  }
 }

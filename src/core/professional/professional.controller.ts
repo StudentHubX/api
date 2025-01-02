@@ -8,7 +8,12 @@ export class ProfessionalController {
     @UseGuards(AuthGuard)
     @Get('profile')
     getProfile(@Request() req) {
-      return req.user;
+      return this.professionalService.fetchUser(req.user.username);
+    }
+    @UseGuards(AuthGuard)
+    @Get('spaces')
+    async getSpaces(@Request() req) {
+      return this.professionalService.getSpaces(req.user.sub);
     }
     @Get(':username')
     async findUser(@Param() username: string) {
@@ -19,4 +24,6 @@ export class ProfessionalController {
     async findUsersOnDepartment(@Param() industry: string) {
       return this.industryService.findUsers(industry as unknown as number);
     }
+
+    
 }

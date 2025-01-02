@@ -6,9 +6,15 @@ export class CreateSpaceDto {
 
     @IsNumber()
     professionalId: number
+    
+    @IsString()
+    description: string
 
     @IsNumber()
     maxNumberOfStudents: number
+
+    @IsString()
+    skillLevel: 'beginner' | 'intermediate' | 'advanced'
 }
 
 export class spacePostDTO {
@@ -19,8 +25,22 @@ export class spacePostDTO {
     type: 'text' | 'image' | 'video'
 
     @IsString()
-    mediaUrl?: string
+    mediaUrl?: string 
 
     @IsNumber()
     spaceId: number
 }
+export class CreateCommentDTO {
+    postId: number;
+    content: string;
+    authorId: number; // Optional if tracking commenter
+  }
+
+  export class ScheduleEventDTO {
+    spaceId: number;
+    title: string;
+    description: string;
+    calenderUrl: string;
+    date: Date;
+  }
+  

@@ -22,7 +22,7 @@ export class StudentController {
 
   @UseGuards(AuthGuard)
   @Get('profile')
-  getProfile(@Request() req):Promise<{username:  string, socials: Social[], fullname: string, email: string, id: number, country: string}> {
+  getProfile(@Request() req):Promise<{username:  string, socials: Social[], fullname: string, email: string, id: number, country: string, faculty: string}> {
     return this.studentService.fetchUser(req.user.username);
   }
 
@@ -30,6 +30,12 @@ export class StudentController {
   @Get('feed')
   getFeed(@Request() req) {
     return this.studentService.feed(req.user.sub, 10);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/spaces')
+  getSpaces(@Request() req) {
+    return this.studentService.getSpaces(req.body.sub)
   }
   @UseGuards(AuthGuard)
   @Post('addSocial')
@@ -48,4 +54,5 @@ export class StudentController {
   async findUsersOnDepartment(@Param() id: string) {
     return this.facultiesService.findUsers(id as unknown as number);
   }
+
 }

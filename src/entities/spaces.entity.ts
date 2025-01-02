@@ -11,7 +11,7 @@ import {
   import { Student } from './student.entity';  // Assuming you have a Student entity
   import { Professional } from './professional.entity';  // Assuming you have a Professional entity
 import { Industry } from './industry.entity';
-import { spacePost } from './spacePost.entity';
+import { SpacePost } from './spacePost.entity';
 import {Event} from './event.entity';
   
   @Entity()
@@ -21,6 +21,9 @@ import {Event} from './event.entity';
   
     @Column()
     name: string;
+
+    @Column()
+    description :string
 
     @ManyToOne(() => Industry, (industry) => industry.spaces)
     industry: Industry
@@ -42,12 +45,17 @@ import {Event} from './event.entity';
     createdAt: Date;
 
     @Column()
+    skillLevel: 'beginner' | 'intermediate' | 'advanced'
+
+    @Column()
     maxNumberOfStudents: number
 
-    @OneToMany(() => spacePost, (post) => post.space)
-    posts: spacePost[]
+    @OneToMany(() => SpacePost, (post) => post.space)
+    posts: SpacePost[]
 
     @OneToMany(() => Event, (event) => event.space) 
     events: Event[]
+
+
   }
   
