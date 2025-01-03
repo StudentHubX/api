@@ -1,4 +1,4 @@
-import { Request, Body, Controller, HttpCode, HttpStatus, Post, Query, BadRequestException, Logger, Get, UseGuards } from '@nestjs/common';
+import { Request, Body, Controller, HttpCode, HttpStatus, Post, Query, BadRequestException, Logger, Get, UseGuards, Param } from '@nestjs/common';
 import { AuthResult, AuthService } from './auth.service';
 import { CreateUserDto } from './auth.dto';
 import { AuthGuard } from 'src/guards/auth-guard';
@@ -42,5 +42,10 @@ export class AuthController {
             return await this.authService.studentLogin(input);
         }
         return await this.authService.professionalLogin(input);
+    }
+
+    @Get(':username')
+    async getUserByUsername(@Param() username: string) {
+        return this.authService.getUserByUsername(username)
     }
 }

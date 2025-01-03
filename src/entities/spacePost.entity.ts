@@ -1,8 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { Spaces } from "./spaces.entity";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm';
+import { Spaces } from './spaces.entity';
+import { SpacePostComment } from './spacePostComment.entity';
 
 @Entity()
-export class spacePost {
+export class SpacePost {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -15,9 +24,15 @@ export class spacePost {
   @Column({ nullable: true })
   mediaUrl?: string;
 
-  @ManyToOne(() => Spaces, (space) => space.posts)
+  @ManyToOne(() => Spaces, (space) => space.posts, { onDelete: 'CASCADE' })
   space: Spaces;
-  
+
+  @Column({ nullable: true })
+  authorId?: number;
+
+  @OneToMany(() => SpacePostComment, (comment) => comment.post, { cascade: true })
+  comments: SpacePostComment[];
+
   @CreateDateColumn()
   createdAt: Date;
 
