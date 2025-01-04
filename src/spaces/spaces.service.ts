@@ -20,7 +20,7 @@ import {
 
 @Injectable()
 export class SpacesService {
-  private readonly logger = new Logger('SpacesService');
+  private readonly logger = new Logger(SpacesService.name);
 
   constructor(
     @InjectRepository(Spaces)
@@ -91,6 +91,7 @@ export class SpacesService {
       throw new BadRequestException('Space has reached its maximum capacity');
     }
 
+    // Fetch the student by username
     const user = await this.studentRepository.findOne({
       where: { username: username },
     });
@@ -99,8 +100,14 @@ export class SpacesService {
       throw new BadRequestException('User not found');
     }
 
+    // Check if the user is already a member of the space
+    if (space.studentMembers.some(member => member.userId === user.userId)) {
+      throw new BadRequestException('User is already a member of the space');
+    }
+
     try {
-      space.studentMembers.push(user);
+      // Add the user to the space's student members
+      space.studentMembers = [...space.studentMembers, user];
       return await this.spacesRepository.save(space);
     } catch (error) {
       this.logger.error('A problem occurred while joining the space', error.stack);

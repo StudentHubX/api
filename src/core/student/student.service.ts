@@ -140,23 +140,28 @@ export class StudentService {
     const joinedSpaceIds = user.spaces.map((space) => space.id);
   
     // Query for joinedSpaces
-    const joinedSpaces = await this.spacesRepository
-      .createQueryBuilder('spaces')
-      .leftJoinAndSelect('spaces.professionalCoordinator', 'professional') // Include coordinator
-      .where('spaces.id IN (:...joinedSpaceIds)', { joinedSpaceIds })
-      .orderBy('spaces.createdAt', 'DESC')
-      .getMany();
+    let joinedSpaces = [];
+    if (joinedSpaceIds.length > 0) {
+      joinedSpaces = await this.spacesRepository
+        .createQueryBuilder('spaces')
+        .leftJoinAndSelect('spaces.professionalCoordinator', 'professional') // Include coordinator
+        .where('spaces.id IN (:...joinedSpaceIds)', { joinedSpaceIds })
+        .orderBy('spaces.createdAt', 'DESC')
+        .getMany();
+    }
   
     // Query for recommendedSpaces (excluding already joined spaces)
-    const recommendedSpaces = await this.spacesRepository
-      .createQueryBuilder('spaces')
-
-      .leftJoinAndSelect('spaces.professionalCoordinator', 'professional') // Include coordinator
-      .where('spaces.industryId IN (:...userIndustryIds)', { userIndustryIds })
-      .andWhere('spaces.id NOT IN (:...joinedSpaceIds)', { joinedSpaceIds })
-      .orderBy('spaces.createdAt', 'DESC')
-      .limit(10)
-      .getMany();
+    let recommendedSpaces = [];
+    if (userIndustryIds.length > 0) {
+      recommendedSpaces = await this.spacesRepository
+        .createQueryBuilder('spaces')
+        .leftJoinAndSelect('spaces.professionalCoordinator', 'professional') // Include coordinator
+        .where('spaces.industryId IN (:...userIndustryIds)', { userIndustryIds })
+        .andWhere(joinedSpaceIds.length > 0 ? 'spaces.id NOT IN (:...joinedSpaceIds)' : '1=1', { joinedSpaceIds })
+        .orderBy('spaces.createdAt', 'DESC')
+        .limit(10)
+        .getMany();
+    }
   
     // Return the result as an object
     return { joinedSpaces, recommendedSpaces };

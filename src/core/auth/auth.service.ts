@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
@@ -32,7 +36,7 @@ export class AuthService {
       isStudent: isStudent,
       username: user.username,
     };
-  
+
     return {
       access_token: await this.jwtService.signAsync(tokenPayload),
     };
@@ -49,7 +53,7 @@ export class AuthService {
       age,
       country,
       gender,
-      email
+      email,
     } = input;
     const salt = await bcrypt.genSalt(10);
 
@@ -57,7 +61,7 @@ export class AuthService {
       this.studentRepository.findOne({ where: { username: username } }),
       this.professionalRepository.findOne({ where: { username: username } }),
     ]);
-    const user = student || professional
+    const user = student || professional;
 
     if (user) {
       return new Error('User already exists');
@@ -77,13 +81,13 @@ export class AuthService {
       faculty: facultyFromEntity,
       country: country,
       gender: gender,
-      email: email
+      email: email,
     };
     const newUser = this.studentRepository.create(inputWithHashedPassword);
     console.log(inputWithHashedPassword);
     await this.studentRepository.save(newUser);
 
-    return await this.generateAccessToken(true, newUser)
+    return await this.generateAccessToken(true, newUser);
   }
   async studentLogin(input: AuthInput) {
     const user = await this.studentRepository.findOne({
@@ -93,7 +97,7 @@ export class AuthService {
     if (!passwordsMatch) {
       return new UnauthorizedException();
     }
-    return await this.generateAccessToken(true, user)
+    return await this.generateAccessToken(true, user);
   }
 
   //Professionals signup/login logic
@@ -106,7 +110,7 @@ export class AuthService {
     if (!passwordsMatch) {
       return new UnauthorizedException();
     }
-    return await this.generateAccessToken(false, user)
+    return await this.generateAccessToken(false, user);
   }
   async professionalSignUp(input: CreateUserDto) {
     const {
@@ -120,7 +124,7 @@ export class AuthService {
       role,
       yearsOfExperience,
       nameOfOrganization,
-      email
+      email,
     } = input;
     const salt = await bcrypt.genSalt(10);
     //check if user is already in existence
@@ -128,7 +132,7 @@ export class AuthService {
       this.studentRepository.findOne({ where: { username: username } }),
       this.professionalRepository.findOne({ where: { username: username } }),
     ]);
-    const user = student || professional
+    const user = student || professional;
     if (user) {
       return new Error('User already exists');
     }
@@ -158,20 +162,25 @@ export class AuthService {
     console.log(inputWithHashedPassword);
     await this.professionalRepository.save(newUser);
 
-    return await this.generateAccessToken(false, newUser)
+    return await this.generateAccessToken(false, newUser);
   }
 
   async getUserByUsername(username: string) {
-    const [student, professional] = await Promise.all([
-      this.studentRepository.findOne({ where: { username: username } }),
-      this.professionalRepository.findOne({ where: { username: username } }),
-    ]);
-    const user = student || professional
-
-    if(!user) {
-      throw new Error("User not found")
+    const student = await this.studentRepository.findOne({
+      where: { username: username },
+    });
+    if (student) {
+      return { user: student, type: 'Student' };
     }
 
-    return user
+    const professional = await this.professionalRepository.findOne({
+      where: { username: username },
+    });
+    if (professional) {
+      return { user: professional, type: 'Professional' };
+    }
+
+    console.log(username)
+    throw new NotFoundException('User not found');
   }
 }

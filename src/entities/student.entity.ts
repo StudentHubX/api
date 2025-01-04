@@ -6,7 +6,6 @@ import {
   ManyToOne,
   JoinTable,
   ManyToMany,
-  OneToOne,
 } from 'typeorm';
 import { Post } from './post.entity';
 import { Spaces } from './spaces.entity';
@@ -14,11 +13,9 @@ import { Resource } from './resource.entity';
 import { Badge } from './badge.entity';
 import { Faculty } from './faculty.entity';
 
-
 export interface Social {
-  username: string,
-  type: 'INSTAGRAM' | 'X'
-
+  username: string;
+  type: 'INSTAGRAM' | 'X';
 }
 
 @Entity()
@@ -27,7 +24,7 @@ export class Student {
   userId: number;
 
   @Column()
-  email: string
+  email: string;
 
   @Column()
   fullname: string;
@@ -53,16 +50,17 @@ export class Student {
   @OneToMany(() => Post, (post) => post.student)
   posts: Post[];
 
-  @ManyToOne(() => Spaces, (room) => room.studentMembers)
+  @ManyToMany(() => Spaces, (room) => room.studentMembers)
+  @JoinTable()
   spaces: Spaces[];
-  
+
   @OneToMany(() => Resource, (resources) => resources.author)
-  resources: Resource[]
+  resources: Resource[];
 
   @ManyToMany(() => Badge, (badge) => badge.id)
   @JoinTable()
-  badges: Badge[]
+  badges: Badge[];
 
   @Column({ type: 'jsonb', nullable: true })
-  socials: Social[]
+  socials: Social[];
 }

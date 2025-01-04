@@ -29,7 +29,7 @@ import {Event} from './event.entity';
     industry: Industry
   
     @ManyToMany(() => Student, (student) => student.spaces)
-    @JoinTable({ name: 'space_students' })
+    @JoinTable()
     studentMembers: Student[];
   
   

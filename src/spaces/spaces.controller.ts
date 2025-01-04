@@ -6,6 +6,8 @@ import {
   Post,
   UseGuards,
   Request,
+  BadRequestException,
+  
 } from '@nestjs/common';
 import { SpacesService } from './spaces.service';
 import {
@@ -15,6 +17,7 @@ import {
   ScheduleEventDTO,
 } from './spaces.dto';
 import { AuthGuard } from 'src/guards/auth-guard';
+import { JoinSpaceDto } from './dto/join-space.dto';
 
 @Controller('spaces')
 export class SpacesController {
@@ -34,19 +37,19 @@ export class SpacesController {
   }
 
   // Join a space
-  @UseGuards(AuthGuard)
-  @Post('joinSpace/:id')
-  async joinSpace(@Param('id') id: string, @Request() req) {
-    await this.spacesService.joinSpace(
-      id as unknown as number,
-      req.user.username,
-    );
+  @Post('join')
+  async joinSpace( @Body() joinSpaceDto: JoinSpaceDto) {
+    const { spaceId, username } = joinSpaceDto;
+    return this.spacesService.joinSpace(spaceId, username);
   }
 
-  // Fetch space details by ID
   @Get(':id')
-  async getSpace(@Param('id') id: string) {
-    return this.spacesService.getSpaceById(id as unknown as number);
+  async getSpaceById(@Param('id') spaceId: number) {
+    const space = await this.spacesService.getSpaceById(spaceId);
+    if (!space) {
+      throw new BadRequestException('Space not found');
+    }
+    return space;
   }
 
   // Create a post in a space
